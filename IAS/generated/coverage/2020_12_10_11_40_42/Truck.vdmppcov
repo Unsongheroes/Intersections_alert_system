@@ -1,0 +1,41 @@
+class Truck is subclass of Vehicle
+
+instance variables
+blindangle: nat;
+public alert: seq of (Alerttype * activeAlert);
+
+values
+type: Transmittertype = <Truck>;
+
+operations 
+
+public Truck : nat * real * real ==> Truck
+Truck(pid, pointx, pointy) == (
+Transmitter`constructor(pid, new Point(pointx, pointy));
+blindangle := 30;
+alert := [mk_(<None>, <Off>)];
+);
+
+public setalertactive: Alerttype * activeAlert ==> ()
+setalertactive(palerttype, palertactivity) == (
+alert := alert ^ [mk_(palerttype, palertactivity)];
+if(len alert > 3) then alert := tl alert;
+TruckAlerted());
+
+public getalert: () ==> (Alerttype * activeAlert) 
+getalert() == return alert(len alert);
+
+
+public TruckAlerted : () ==> ()
+TruckAlerted() == 
+(
+	IO`printf("%s with id: %s received an alert: %s \n",[type, id, alert(len alert)]);
+);
+
+pure public gettype: () ==> Transmittertype
+gettype() == 
+return type;
+
+
+
+end Truck

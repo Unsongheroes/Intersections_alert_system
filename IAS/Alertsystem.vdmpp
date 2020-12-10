@@ -1,0 +1,134 @@
+class Alertsystem is subclass of Global
+
+instance variables
+
+public lRoadNetwork : [RoadNetwork] := nil;
+
+transmitters: set of Transmitter := {};
+outofdangertransmitters: set of Transmitter := {};
+earlyWarningDistance: nat1 := 2;
+
+
+types
+
+
+
+operations
+
+public Alertsystem: () ==> Alertsystem
+Alertsystem() == 
+(
+lRoadNetwork := new RoadNetwork();
+);
+
+public getDangerzone: Global`DangerId ==> DangerZone
+getDangerzone(pDId) == return lRoadNetwork.dangerzones(pDId)
+pre pDId in set dom lRoadNetwork.dangerzones;
+
+
+
+public alertTransmitter: seq of DangerZone ==> seq of DangerZone
+alertTransmitter(pdangerzones) == 
+if pdangerzones = [] then return [] else
+( 
+let ldangerzone = hd pdangerzones
+in 
+(
+		let alltransmitters = {x | x in set rng ldangerzone.detected}
+		in
+			(
+			transmitters := alltransmitters;
+			for all ltransmitters in set transmitters
+			do
+				( 
+					if(isTransmitterofdifferenttypes(transmitters))
+					 then 
+						ltransmitters.setalertactive(<Danger>, <Active>)
+					 else(
+					  ltransmitters.setalertactive(<Danger>, <Off>))
+				)
+			)
+	);
+alertTransmitter(tl pdangerzones););
+
+
+
+public checkpossibleDanger: () ==> ()
+checkpossibleDanger() == 
+(
+let dangerzones = lRoadNetwork.getDangerzones()
+in (
+	for all dangerzone in set dangerzones
+		do (
+			for all ltransmitter in set rng lRoadNetwork.roadNetwork
+				do (
+				if(ltransmitter not in set rng dangerzone.detected and isofclass(Vehicle,ltransmitter)) then (
+				 outofdangertransmitters := outofdangertransmitters union {ltransmitter};
+				 for all innertransmitters in set outofdangertransmitters 
+				 do (
+				 	if(len innertransmitters.getDirection() = 3) then
+				 		willbeindangerzone(dangerzone, innertransmitters)
+				 )
+				 ) else (
+				 dcl seqdangerzones: seq of DangerZone := set2seqDangerZone(dangerzones);
+				 middleware(seqdangerzones);
+				 );
+				 
+				)
+		)
+	)
+);
+
+public willbeindangerzone: DangerZone * Transmitter ==> ()
+willbeindangerzone(pdz, outofdanger) == (
+dcl ltransmitter: Transmitter := outofdanger;
+dcl vector: seq of Vector := outofdanger.getDirectionHistory();
+dcl direction: Vector := vectorSum(vector(1), vector(2));
+ltransmitter.setCoord(direction.X + earlyWarningDistance,direction.Y + earlyWarningDistance);
+if(pdz.InRange(ltransmitter)) then (
+	outofdanger.setalertactive(<DirectionWarning>, <Active>);
+		for all trans in set rng pdz.detected
+			do (
+				trans.setalertactive(<Warning>, <Active>);
+				 );
+	)
+)
+pre len outofdanger.getDirection() = 3;
+
+public step : () ==> ()
+step() == 
+	(for all d in set rng lRoadNetwork.dangerzones do (
+		d.Scan(lRoadNetwork));
+		checkpossibleDanger();
+		
+);
+
+middleware: seq of DangerZone ==> ()
+middleware(pdangerzone) == (
+dcl ldangerzone: seq of DangerZone  := pdangerzone;
+while ldangerzone <> []
+do 
+ldangerzone := alertTransmitter(pdangerzone));
+
+
+functions
+
+set2seqDangerZone : set of DangerZone -> seq of DangerZone
+set2seqDangerZone(pdangerZones) ==
+if pdangerZones = {}
+then []
+else let dangerZone in set pdangerZones
+in
+[dangerZone] ^ set2seqDangerZone(pdangerZones\{dangerZone})
+measure card pdangerZones;
+
+private isTransmitterofdifferenttypes : set of Transmitter -> bool
+isTransmitterofdifferenttypes(pTrans) == 
+if(card pTrans <= 1 ) then (false) else (
+exists x,y in set pTrans & x.gettype() <> y.gettype()
+);
+
+
+
+
+end Alertsystem

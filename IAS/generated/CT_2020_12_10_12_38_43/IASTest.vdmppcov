@@ -1,0 +1,196 @@
+class IASTest is subclass of TestCase
+types
+-- TODO Define types here
+values
+	refids : seq of nat = [1,2,3];
+	size : nat = 3;
+instance variables
+
+	comstartpoint : seq of Point := [new Point(1,1),new Point(1,4),new Point(1,1)];
+	compoint : seq of Point := [new Point(2,2),new Point(3,3),new Point(3,4),new Point(4,4), new Point(1,2), new Point(3,3)];
+	comtrans : seq of Transmitter := [new Cyclist(refids(1),comstartpoint(1).x,comstartpoint(1).y),new Train(refids(2),comstartpoint(2).x,comstartpoint(2).y),new Truck(refids(3),comstartpoint(3).x,comstartpoint(3).y)];
+	startpoint : Point;
+	point1 : Point;
+	endpoint : Point;
+	dangerzonecenter : Point := new Point (5,5);
+	dangerzone : DangerZone := new DangerZone(refids(1),size, dangerzonecenter);
+	alertsystem : Alertsystem;
+	roadNetwork : RoadNetwork := new RoadNetwork();
+	comdanger : set of DangerZone := {dangerzone};
+	cyclist : Cyclist;
+	truck : Truck;
+-- TODO Define instance variables here
+operations
+	protected SetUp: () ==> ()
+	SetUp() == (
+	startpoint := new Point(1,1);
+	point1 := new Point(1,2);
+	endpoint := new Point(3,3);
+	cyclist := new Cyclist(refids(2), 4,4);
+	truck := new Truck(refids(3), startpoint.x,startpoint.y);
+	);
+	
+	protected TestAddcorrectDangerzoneToRoadNetwork: () ==> ()
+	TestAddcorrectDangerzoneToRoadNetwork () == 
+	(
+	-- assign
+	dcl tc : RoadNetwork := new RoadNetwork();
+	SetUp();
+	-- act
+	tc.addDangerzone(dangerzone);
+	-- assert
+	assertTrue(tc.getDangerZone(refids(1)).getSize() = size);
+	TearDown();
+	);
+	
+		protected TestAddcorrectDangerzoneToRoadNetwork2: () ==> ()
+	TestAddcorrectDangerzoneToRoadNetwork2 () == 
+	(
+	-- assign
+	dcl tc : RoadNetwork := new RoadNetwork();
+	SetUp();
+	-- act
+	tc.addDangerzone(dangerzone);
+	-- assert
+	assertTrue(tc.dangerzones = {1 |-> dangerzone});
+	TearDown();
+	);
+	
+	
+	protected TestremovefromEmptyDangerzoneToRoadNetwork: () ==> ()
+	TestremovefromEmptyDangerzoneToRoadNetwork () == 
+	(
+	-- assign
+	dcl tc : RoadNetwork := new RoadNetwork();
+	SetUp();
+	-- act
+	tc.addDangerzone(dangerzone);
+	tc.removeDangerzone(refids(1));
+	-- assert
+	assertFalse(tc.dangerzones = {1 |-> dangerzone});
+	TearDown();
+	);
+	
+		protected TestAddandCheckSumofTransmitters: () ==> ()
+	TestAddandCheckSumofTransmitters () == 
+	(
+	-- assign
+	dcl tc : RoadNetwork := new RoadNetwork();
+	SetUp();
+	-- act
+	tc.addDangerzone(dangerzone);
+	tc.addTransmitter(cyclist);
+	tc.addTransmitter(truck);
+	-- assert
+	assertTrue(card tc.getTransmitters() = 2);
+	TearDown();
+	);
+	
+	
+	protected TestCheckDirectionLen: () ==> ()
+	TestCheckDirectionLen () == 
+	(
+	-- assign
+	dcl tc : RoadNetwork := new RoadNetwork();
+	SetUp();
+	-- act
+	tc.addDangerzone(dangerzone);
+	tc.addTransmitter(cyclist);
+	tc.addTransmitter(truck);
+	tc.updateTransmitter(refids(2),truck.gettype(),startpoint);
+	tc.updateTransmitter(refids(2),truck.gettype(),point1);
+	tc.updateTransmitter(refids(2),truck.gettype(),endpoint);
+	-- assert 
+	
+	assertTrue(len tc.getTransmitter(refids(2)).getDirection() = 3);
+	TearDown();
+	);
+	
+	protected TestCheckVector: () ==> ()
+	TestCheckVector () == 
+	(
+	-- assign
+	dcl tc : RoadNetwork := new RoadNetwork();
+	SetUp();
+	-- act
+	tc.addDangerzone(dangerzone);
+	tc.addTransmitter(cyclist);
+	tc.addTransmitter(truck);
+	tc.updateTransmitter(refids(3),truck.gettype(),startpoint);
+	tc.updateTransmitter(refids(3),truck.gettype(),point1);
+	tc.updateTransmitter(refids(3),truck.gettype(),endpoint);
+	-- assert 
+	assertTrue(tc.vectorSum(tc.getTransmitter(refids(3)).getDirectionHistory()(1),tc.getTransmitter(refids(3)).getDirectionHistory()(2)) = mk_Global`Vector(2, 2));
+	TearDown();
+	);
+	
+		protected Testwillbeindangerzone: () ==> ()
+	Testwillbeindangerzone () == 
+	(
+	-- assign
+	dcl tc : Alertsystem := new Alertsystem();
+	SetUp();
+	-- act
+	tc.lRoadNetwork.addDangerzone(dangerzone);
+	tc.lRoadNetwork.addTransmitter(cyclist);
+	tc.lRoadNetwork.addTransmitter(truck);
+	tc.lRoadNetwork.updateTransmitter(refids(3),truck.gettype(),startpoint);
+	tc.lRoadNetwork.updateTransmitter(refids(3),truck.gettype(),point1);
+	tc.lRoadNetwork.updateTransmitter(refids(3),truck.gettype(),endpoint);
+	IO`printf("%s", [len truck.getDirection()]);
+	tc.willbeindangerzone(dangerzone, truck);
+	-- assert 
+	assertTrue(truck.getalert() = mk_(<DirectionWarning>, <Active>));
+	TearDown();
+	);
+	
+	
+	
+
+	
+	
+	
+	protected TearDown: () ==> ()
+	TearDown () == skip;
+	
+functions
+-- TODO Define functions here
+traces
+
+t1 : let mytrans in seq comtrans
+			in 
+				(
+				roadNetwork.addTransmitter(mytrans);
+				roadNetwork.removeTransmitter(mytrans.getid());
+				);
+				
+t2 : 
+let mydanger in set comdanger 
+	in
+		let mytrans in seq comtrans
+			in 
+			let mypoint in seq compoint 
+				in
+				(
+				roadNetwork.addTransmitter(mytrans);
+				roadNetwork.addDangerzone(mydanger);
+				roadNetwork.updateTransmitter(mytrans.getid(),mytrans.gettype(),mypoint);
+				);
+
+
+end IASTest
+
+class AllTest
+operations
+public Execute: () ==> ()
+Execute () == (
+let tests : set of Test = {new IASTest()}, 
+ts : TestSuite = new TestSuite(tests),
+result : TestResult = new TestResult() in (
+--ts.addTest(new TBSASTest());
+ts.run(result);
+IO`print(result.toString());)
+
+);
+
+end AllTest

@@ -1,0 +1,24 @@
+class Time 
+
+types 
+
+
+instance variables
+time: nat1 := 5;
+
+
+operations
+
+
+public getTime: () ==> nat1
+getTime() ==
+return time;
+
+
+public Steptime: () ==> ()
+Steptime() == 
+time := time +1;
+
+
+
+end Time

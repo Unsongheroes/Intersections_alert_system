@@ -1,0 +1,28 @@
+class World 
+
+types 
+public steptype :: id : nat
+									 transmittertype : Global`Transmittertype 
+									 x  : real
+									 y  : real
+									 pt : nat;
+
+instance variables
+env: [Environment] := nil;
+public static timerRef: Time := new Time();
+/*test data*/
+startPoint: Point := new Point(1,1);
+steps: seq of steptype := [mk_steptype(1, <Cyclist>, 1,2,5), mk_steptype(2,<Truck>,1,3,4), mk_steptype(1,<Cyclist>,2,3,3), mk_steptype(2,<Truck>,0,2,2), mk_steptype(2,<Truck>, 10,10,1),mk_steptype(1,<Cyclist>, 2,3,0)];
+Dangerzone1: DangerZone := new DangerZone(1,3,startPoint);
+
+operations
+public World : () ==> World
+World() == (
+env := new Environment(steps);
+env.alt.lRoadNetwork.addDangerzone(Dangerzone1);
+);
+
+public Run: () ==> ()
+Run() == env.Run(); 
+
+end World

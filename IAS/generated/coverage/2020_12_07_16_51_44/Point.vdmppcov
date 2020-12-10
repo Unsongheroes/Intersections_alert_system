@@ -1,0 +1,21 @@
+class Point
+
+instance variables 
+
+public x: real;
+public y: real;
+/*for indexing the points to create direction*/
+
+operations
+
+public Point: nat * nat ==> Point
+Point(px, py) == 
+( x := px;
+	y := py;
+);
+
+public GetCoord: () ==> nat * nat
+GetCoord() ==
+return mk_(x,y);
+
+end Point

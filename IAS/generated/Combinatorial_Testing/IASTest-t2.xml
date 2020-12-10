@@ -1,0 +1,43 @@
+<traces>
+	<class name="IASTest">
+		<trace name="t2" testcount="18" filename="IASTest.vdmpp" line="167" column="1" subset="1.0" reduction="NONE" seed="999">
+			<test no="1">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(1, &amp;lt;Cyclist&amp;gt;, mypoint)</test>
+			<result no="1" verdict="PASSED">() ; () ; ()</result>
+			<test no="2">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(1, &amp;lt;Cyclist&amp;gt;, mypoint)</test>
+			<result no="2" verdict="PASSED">() ; () ; ()</result>
+			<test no="3">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(1, &amp;lt;Cyclist&amp;gt;, mypoint)</test>
+			<result no="3" verdict="PASSED">() ; () ; ()</result>
+			<test no="4">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(1, &amp;lt;Cyclist&amp;gt;, mypoint)</test>
+			<result no="4" verdict="PASSED">() ; () ; ()</result>
+			<test no="5">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(1, &amp;lt;Cyclist&amp;gt;, mypoint)</test>
+			<result no="5" verdict="PASSED">() ; () ; ()</result>
+			<test no="6">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(1, &amp;lt;Cyclist&amp;gt;, mypoint)</test>
+			<result no="6" verdict="PASSED">() ; () ; ()</result>
+			<test no="7">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(2, &amp;lt;Train&amp;gt;, mypoint)</test>
+			<result no="7" verdict="PASSED">() ; () ; ()</result>
+			<test no="8">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(2, &amp;lt;Train&amp;gt;, mypoint)</test>
+			<result no="8" verdict="PASSED">() ; () ; ()</result>
+			<test no="9">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(2, &amp;lt;Train&amp;gt;, mypoint)</test>
+			<result no="9" verdict="PASSED">() ; () ; ()</result>
+			<test no="10">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(2, &amp;lt;Train&amp;gt;, mypoint)</test>
+			<result no="10" verdict="PASSED">() ; () ; ()</result>
+			<test no="11">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(2, &amp;lt;Train&amp;gt;, mypoint)</test>
+			<result no="11" verdict="PASSED">() ; () ; ()</result>
+			<test no="12">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(2, &amp;lt;Train&amp;gt;, mypoint)</test>
+			<result no="12" verdict="PASSED">() ; () ; ()</result>
+			<test no="13">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(3, &amp;lt;Truck&amp;gt;, mypoint)</test>
+			<result no="13" verdict="PASSED">() ; () ; ()</result>
+			<test no="14">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(3, &amp;lt;Truck&amp;gt;, mypoint)</test>
+			<result no="14" verdict="PASSED">() ; () ; ()</result>
+			<test no="15">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(3, &amp;lt;Truck&amp;gt;, mypoint)</test>
+			<result no="15" verdict="PASSED">() ; () ; ()</result>
+			<test no="16">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(3, &amp;lt;Truck&amp;gt;, mypoint)</test>
+			<result no="16" verdict="PASSED">() ; () ; ()</result>
+			<test no="17">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(3, &amp;lt;Truck&amp;gt;, mypoint)</test>
+			<result no="17" verdict="PASSED">() ; () ; ()</result>
+			<test no="18">roadNetwork.addTransmitter(mytrans); roadNetwork.addDangerzone(mydanger); roadNetwork.updateTransmitter(3, &amp;lt;Truck&amp;gt;, mypoint)</test>
+			<result no="18" verdict="PASSED">() ; () ; ()</result>
+			<status verdict="PASSED" testcount="18" skippedcount="0" faildcount="0" inconclusivecount="0"></status>
+		</trace>
+	</class>
+</traces>

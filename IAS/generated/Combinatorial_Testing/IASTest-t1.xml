@@ -1,0 +1,13 @@
+<traces>
+	<class name="IASTest">
+		<trace name="t1" testcount="3" filename="IASTest.vdmpp" line="160" column="1" subset="1.0" reduction="NONE" seed="999">
+			<test no="1">roadNetwork.addTransmitter(mytrans); roadNetwork.removeTransmitter(1)</test>
+			<result no="1" verdict="PASSED">() ; ()</result>
+			<test no="2">roadNetwork.addTransmitter(mytrans); roadNetwork.removeTransmitter(2)</test>
+			<result no="2" verdict="PASSED">() ; ()</result>
+			<test no="3">roadNetwork.addTransmitter(mytrans); roadNetwork.removeTransmitter(3)</test>
+			<result no="3" verdict="PASSED">() ; ()</result>
+			<status verdict="PASSED" testcount="3" skippedcount="0" faildcount="0" inconclusivecount="0"></status>
+		</trace>
+	</class>
+</traces>

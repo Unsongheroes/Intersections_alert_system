@@ -1,0 +1,23 @@
+class Global
+
+types
+public Transmittertype = <Truck> | <Cyclist> | <Train>;  
+public activeAlert = <Active> | <Off>;
+public Alerttype = <DirectionWarning> | <Warning> | <Danger> | <None>;
+public Direction = seq of Point;
+
+public Vector ::
+X : real
+Y : real;
+
+
+public TransmitterID = nat;
+
+public DangerId = nat;
+
+functions
+public vectorSum : Vector * Vector -> Vector
+vectorSum(v1,v2) ==
+mk_Vector(v1.X + v2.X, v1.Y + v2.Y);
+	
+end Global

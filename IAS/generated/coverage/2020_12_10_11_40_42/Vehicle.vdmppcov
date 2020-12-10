@@ -1,0 +1,21 @@
+class Vehicle is subclass of Transmitter
+
+instance variables 
+protected coord: Point;
+
+operations
+
+
+public Vehicle: Point  ==> Vehicle
+Vehicle( pNode) == 
+(
+	coord := pNode;
+);
+
+
+public setalertactive: Alerttype * activeAlert ==> ()
+setalertactive(palerttype, palertactivity) == 
+is subclass responsibility;
+
+
+end Vehicle

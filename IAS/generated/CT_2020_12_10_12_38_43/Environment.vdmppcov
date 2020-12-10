@@ -1,0 +1,48 @@
+class Environment
+
+instance variables
+public alt: [Alertsystem] := nil;
+done: bool := false;
+lpoint: [Point] := nil;
+steps : seq of World`steptype;
+
+operations
+
+public Environment: seq of World`steptype  ==> Environment
+Environment(pinput) == (
+	steps := pinput;
+	alt := new Alertsystem());
+	
+public Run: () ==> ()
+Run() == (
+while not Isfinished()
+	do 
+	(
+	UpdateTransmitters();
+	alt.step();
+	World`timerRef.Steptime();
+	)
+);
+
+UpdateTransmitters: () ==> ()
+UpdateTransmitters() ==
+(
+dcl curtime : nat1 := World`timerRef.getTime();
+let step = hd steps
+ 	 		in
+ 	 		(
+ 	 		if(step.pt <= curtime) then (
+ 	 			lpoint := new Point(step.x,step.y);
+ 	 			alt.lRoadNetwork.updateTransmitter(step.id,step.transmittertype,lpoint);
+			  steps := tl steps;
+ 	 			done := len steps = 0) else done := true
+ 	 		)
+)
+pre len steps > 0;
+ 
+
+Isfinished: () ==> bool
+Isfinished() == return done; 
+
+
+end Environment

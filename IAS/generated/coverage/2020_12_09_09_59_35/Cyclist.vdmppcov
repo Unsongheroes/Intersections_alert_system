@@ -1,0 +1,97 @@
+class Cyclist is subclass of Transmitter
+
+instance variables
+--coord: Point;
+alert: seq of (Alerttype * activeAlert);
+--public dangerid: Global`DangerId;
+
+values
+type: Transmittertype = <Cyclist>;
+
+operations 
+
+/*pure public getdangerid: () ==> DangerId
+getdangerid() == 
+return dangerid;
+
+
+public setdangerid: DangerId ==> ()
+setdangerid(did) == 
+dangerid := did;*/
+
+public getalert: () ==> (Alerttype * activeAlert) 
+getalert() == return alert(len alert);
+
+
+public Cyclist : nat * real * real ==> Cyclist
+Cyclist(pid, pointx, pointy) == (
+Transmitter`constructor(pid, new Point(pointx, pointy));
+--coord := new Point(pointx, pointy);
+--direction := [] ^ [coord];
+alert := [mk_(<None>, <Off>)];
+);
+
+public setalertactive: Alerttype * activeAlert ==> ()
+setalertactive(palerttype, palertactivity) == (
+alert := alert ^ [mk_(palerttype, palertactivity)];
+if(len alert > 3) then alert := tl alert;
+CyclistAlerted());
+
+/*
+public setCoord: Point ==> ()
+setCoord(ppoint) == (
+	coord := ppoint;
+	registerPosition());
+	
+public setCoord: real * real ==> ()
+setCoord(pxpoint, pypoint) == (
+	coord.x := pxpoint;
+	coord.y := pypoint;
+	);
+
+pure public getcoord: () ==> Point
+getcoord() ==
+return coord;
+*/
+public CyclistAlerted : () ==> ()
+CyclistAlerted() == 
+(
+
+	IO`printf("%s with id: %s received an alert: %s \n",[type, id,  alert(len alert)]);
+);
+
+/*
+public registerPosition : () ==> ()
+registerPosition() ==
+if len direction < 3
+then direction := direction ^ [coord]
+else direction := tl direction ^ [coord];
+
+public getDirection : () ==> Direction
+getDirection() == 
+return direction;
+
+
+public getDirectionHistory : () ==> seq of Vector
+getDirectionHistory() ==
+let p1 = direction(1),
+p2 = direction(2),
+p3 = direction(3)
+in
+return [mk_Vector(p1.x - p2.x,
+p1.y - p2.y),
+mk_Vector(p2.x - p3.x,
+p2.y - p3.y)]
+pre len direction = 3;*/
+
+
+pure public gettype: () ==> Transmittertype
+gettype() == 
+return type;
+
+
+
+functions
+
+
+end Cyclist

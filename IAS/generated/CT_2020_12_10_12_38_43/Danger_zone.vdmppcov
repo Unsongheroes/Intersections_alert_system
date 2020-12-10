@@ -1,0 +1,75 @@
+class DangerZone is subclass of Global
+
+instance variables
+public size: nat1;
+
+id: DangerId;
+public detected: map TransmitterID to Transmitter;
+public location: Point;
+
+
+
+
+operations 
+
+public DangerZone : nat *  nat * Point ==> DangerZone
+DangerZone(pid, psize, ploc) == (
+id := pid;
+size := psize;
+location := ploc;
+detected := {|->};
+);
+
+pure public getid : () ==> nat
+getid() == return id;
+
+
+pure public getlocation : () ==> Point
+getlocation() == return location;
+
+pure public getSize : () ==> nat
+getSize() == 
+return size;
+
+public Scan : RoadNetwork ==> ()
+Scan(RN) ==
+(
+detected := { x.getid() |-> x
+| x in set RN.getTransmitters()
+& InRange(x) };
+assigndid();
+);
+
+private assigndid: () ==> ()
+assigndid() == 
+(
+for all trans in set rng detected do trans.setdangerid(id);
+);
+
+public getDetected : () ==> set of Transmitter
+getDetected() == return rng detected;
+
+public InRange : Transmitter ==> bool
+InRange(obj) ==(
+let transLocationt = obj.getcoord()
+in
+return isPointInRange(location,size,transLocationt));
+
+public DangerZone : nat1 * map nat to Transmitter * Point ==> DangerZone
+DangerZone(psize, pdangerzone, pNode) ==
+(
+size := psize;
+detected := pdangerzone;
+location := pNode;
+);
+
+functions
+
+
+private isPointInRange : Point * nat1 *
+Point -> bool
+isPointInRange(center,range,point) ==
+(center.x - point.x)**2 +
+(center.y - point.y)**2 <= range**2
+
+end DangerZone

@@ -1,0 +1,45 @@
+class Train is subclass of Vehicle
+
+instance variables
+speed: nat;
+alert: seq of (Alerttype * activeAlert);
+
+
+values
+type: Transmittertype = <Train>;
+
+operations 
+
+
+
+public getalert: () ==> (Alerttype * activeAlert) 
+getalert() == return alert(len alert);
+
+
+public Train : nat * real * real ==> Train
+Train(pid, pointx, pointy) == (
+Transmitter`constructor(pid,new Point(pointx, pointy));
+speed := 45;
+alert := [mk_(<None>, <Off>)];
+);
+
+public setalertactive: Alerttype * activeAlert ==> ()
+setalertactive(palerttype, palertactivity) == (
+alert := alert ^ [mk_(palerttype, palertactivity)];
+if(len alert > 3) then alert := tl alert;
+TrainAlerted());
+
+public TrainAlerted : () ==> ()
+TrainAlerted() == 
+(
+	IO`printf("%s with id: %s received an alert: %s \n",[type, id, alert(len alert)]);
+);
+
+pure public gettype: () ==> Transmittertype
+gettype() == 
+return type;
+
+
+
+
+end Train

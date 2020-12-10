@@ -1,0 +1,131 @@
+class RoadNetwork is subclass of Global
+
+instance variables
+public roadNetwork: map nat to Transmitter := {|->};
+public dangerzones: map DangerId to DangerZone;
+inv RoadNetworkInv(dangerzones);
+
+operations
+
+
+
+public RoadNetwork: () ==> RoadNetwork
+RoadNetwork() == (
+roadNetwork := {|->}; 
+dangerzones := {|->};);
+
+public addDangerzone: DangerZone ==> ()
+addDangerzone(pDZ) == 
+(
+dangerzones := dangerzones munion {pDZ.getid() |-> pDZ};
+)
+pre forall x in set rng dangerzones & pDZ.getid() <> x.getid(); 
+
+
+public removeDangerzone: DangerId ==> ()
+removeDangerzone(pDZ) == 
+(
+dangerzones := {pDZ} <-: dangerzones;
+/*dangerzones := dangerzones \ {pDZ};*/
+)
+pre pDZ in set dom dangerzones; 
+
+pure public getDangerZone: DangerId ==> DangerZone
+getDangerZone(pid) == 
+return dangerzones(pid)
+pre pid in set dom dangerzones;
+
+
+pure public getDangerzones: () ==> set of DangerZone
+getDangerzones() == 
+return {x | x in set rng dangerzones};
+
+
+public addTransmitter : Transmitter ==> ()
+addTransmitter(obj) == 
+(
+roadNetwork := roadNetwork munion {obj.getid() |-> obj})
+	pre forall x in set rng roadNetwork & obj.getid() <> x.getid();
+	
+pure public getTransmitter : nat ==> Transmitter
+getTransmitter(id) ==
+return roadNetwork(id)
+pre id in set dom roadNetwork;
+
+pure public getTransmitters: () ==> set of Transmitter
+getTransmitters() == 
+return rng roadNetwork;
+
+public removeTransmitter : nat ==> ()
+removeTransmitter(id) ==
+roadNetwork := {id} <-: roadNetwork
+pre id in set dom roadNetwork;
+
+public RoadNetwork : map nat to Transmitter ==> RoadNetwork
+RoadNetwork(proadNetwork) ==
+(
+roadNetwork := proadNetwork;
+);
+
+public updateTransmitter: nat * Transmittertype * Point ==> ()
+updateTransmitter(id,ptype, Point) == 
+(
+
+if TransmitterExists(id,roadNetwork) then 
+	let t = getTransmitter(id) 
+		in 
+			t.setCoord(Point)
+else (
+	cases ptype:
+	<Cyclist> -> createCyclist(id,Point.x, Point.y),
+	<Truck> -> 	createTruck(id,Point.x, Point.y),
+	<Train> -> createTrain(id,Point.x, Point.y)
+	end)
+			);
+
+public createTruck: nat * real * real ==> ()
+createTruck(id,x,y) == 
+(
+
+let newtransmitter = new Truck(id, x, y)
+			in 
+				addTransmitter(newtransmitter);
+);
+
+public createCyclist: nat * real * real ==> ()
+createCyclist(id,x,y) == 
+(
+
+let newtransmitter = new Cyclist(id, x, y)
+			in 
+				addTransmitter(newtransmitter);
+);
+
+public createTrain: nat * real * real ==> ()
+createTrain(id,x,y) == 
+(
+
+let newtransmitter = new Train(id, x, y)
+			in 
+				addTransmitter(newtransmitter);
+)
+
+
+functions 
+
+RoadNetworkInv: map DangerId to DangerZone -> bool
+RoadNetworkInv(Dangerzone) == 
+if(card dom Dangerzone < 2) then true else
+forall d,d1 in set rng Dangerzone &
+	MATH`sqrt((d.location.x - d1.location.x)**2 + (d.location.y - d1.location.y)**2) >= (d.size + d1.size);
+
+DangerzoneExists: Point * set of DangerZone -> bool
+DangerzoneExists(pid, dangerzones) == 
+exists d in set dangerzones & d.getlocation() = pid;
+
+
+TransmitterExists: nat * map nat to Transmitter -> bool
+TransmitterExists(id,roadNetwork) ==
+exists t in set rng roadNetwork & t.getid() = id;
+
+end RoadNetwork

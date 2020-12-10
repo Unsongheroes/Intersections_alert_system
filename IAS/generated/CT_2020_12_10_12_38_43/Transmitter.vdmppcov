@@ -1,0 +1,94 @@
+class Transmitter is subclass of Global
+instance variables
+protected id : nat;
+protected coord: Point;
+protected direction: Direction := [];
+inv len direction <= 3;
+type: Transmittertype;
+protected dangerid: Global`DangerId;
+
+
+
+operations
+
+public Transmitter: nat * Point * Transmittertype ==> Transmitter
+Transmitter(pid, pNode, pType) == 
+( id := pid;
+	coord := pNode;
+	type := pType;
+	);
+	
+public Transmitter: () ==> Transmitter
+Transmitter() == 
+return self;	
+
+protected constructor: nat * Point ==> ()
+constructor(pid, pNode) == (
+id := pid;
+coord := pNode;
+setCoord(coord); );
+
+public setalertactive: Alerttype * activeAlert ==> ()
+setalertactive(palerttype, palertactivity) == 
+is subclass responsibility;
+	
+pure public getdangerid: () ==> DangerId
+getdangerid() == 
+return dangerid;
+
+
+public setdangerid: DangerId ==> ()
+setdangerid(did) == 
+dangerid := did;
+
+pure public getcoord: () ==> Point
+getcoord() ==
+return coord;
+
+public setCoord: Point ==> ()
+setCoord(ppoint) == (
+	coord := ppoint;
+	registerPosition());
+	
+public setCoord: real * real ==> ()
+setCoord(pxpoint, pypoint) == (
+	coord.x := pxpoint;
+	coord.y := pypoint;
+	);
+
+pure public gettype: () ==> Transmittertype
+gettype() ==
+is subclass responsibility;
+
+public registerPosition : () ==> ()
+registerPosition() ==
+if len direction < 3
+then direction := direction ^ [coord]
+else direction := tl direction ^ [coord];
+
+pure public getDirection : () ==> Direction
+getDirection() == 
+return direction;
+
+
+pure public getDirectionHistory : () ==> seq of Vector
+getDirectionHistory() ==
+let p1 = direction(1),
+p2 = direction(2),
+p3 = direction(3)
+in
+return [mk_Vector(p2.x - p1.x,
+p2.y - p1.y),
+mk_Vector(p3.x - p2.x,
+p3.y - p2.y)]
+pre len direction = 3;
+
+
+
+
+
+pure public getid: () ==> nat 
+getid() == 
+	return id;
+
+end Transmitter
